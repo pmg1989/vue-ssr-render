@@ -1,15 +1,11 @@
-const Vue = require('vue')
 const server = require('express')()
+const createApp = require('./src/app')
+
 const renderer = require('vue-server-renderer').createRenderer({
   template: require('fs').readFileSync('./src/index.template.html', 'utf-8')
 })
 server.get('*', (req, res) => {
-  const app = new Vue({
-    data: {
-      url: req.url
-    },
-    template: `<div>访问的 URL 是： {{ url }}</div>`
-  })
+  const app = createApp({ url: req.url })
 
   const context = {
     title: 'hello world!',
