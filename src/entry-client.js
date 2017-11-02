@@ -42,7 +42,6 @@ if (window.__INITIAL_STATE__) {
   store.replaceState(window.__INITIAL_STATE__)
 }
 
-// 这里假定 App.vue 模板中根元素具有 `id="app"`
 router.onReady(() => {
   // 在路由导航之前解析数据
   // 添加路由钩子函数，用于处理 asyncData.
@@ -71,5 +70,6 @@ router.onReady(() => {
       next()
     }).catch(next)
   })
+  // 这里设定 App.vue 模板中根元素具有 `id="app"`
   app.$mount('#app')
 })
