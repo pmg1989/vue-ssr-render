@@ -9,7 +9,7 @@ export function createRouter () {
     fallback: false,
     scrollBehavior: () => ({ y: 0 }),
     routes: [
-      { path: '/demo', component: () => import('../views/Demo.vue') },
+      { path: '/item/:id', component: () => import('../views/Item.vue') },
       { path: '/', component: () => import('../views/Home.vue') }
     ]
   })
