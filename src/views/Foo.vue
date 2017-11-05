@@ -10,6 +10,9 @@ import { mapActions } from 'vuex'
 // 在这里导入模块，而不是在 `store/index.js` 中
 import fooStoreModule from '../store/modules/foo'
 export default {
+  title () {
+    return 'foo'
+  },
   asyncData ({ store }) {
     store.registerModule('foo', fooStoreModule)
     return store.dispatch('foo/inc')

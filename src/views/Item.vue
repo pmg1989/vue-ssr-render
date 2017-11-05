@@ -3,6 +3,9 @@
 </template>
 <script>
 export default {
+  title () {
+    return this.item.title
+  },
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
     return store.dispatch('fetchItem', route.params.id)
