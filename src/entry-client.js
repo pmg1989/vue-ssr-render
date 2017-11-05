@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import 'es6-promise/auto'
 import { createApp } from './app'
+import ProgressBar from './components/ProgressBar.vue'
+
+// global progress bar
+const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
+document.body.appendChild(bar.$el)
 
 // 客户端数据预取(Client Data Fetching)
-
 // 匹配要渲染的视图后，再获取数据(如需实现这种客户端数据预取策略，解注此段代码，并注释 router.beforeResolve相关代码即可)
 Vue.mixin({
   beforeMount () {
+    bar.start()
     const { asyncData } = this.$options
     if (asyncData) {
       // 将获取数据操作分配给 promise
@@ -15,7 +20,11 @@ Vue.mixin({
       this.dataPromise = asyncData({
         store: this.$store,
         route: this.$route
+      }).then(() => {
+        bar.finish()
       })
+    } else {
+      bar.finish()
     }
   }
 })
@@ -57,18 +66,19 @@ router.onReady(() => {
   //   const activated = matched.filter((c, i) => {
   //     return diffed || (diffed = (prevMatched[i] !== c))
   //   })
-  //   if (!activated.length) {
+  //   const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
+  //   if (!asyncDataHooks.length) {
   //     return next()
   //   }
   //   // 这里如果有加载指示器(loading indicator)，就触发
-  //   Promise.all(activated.map(c => {
-  //     if (c.asyncData) {
-  //       return c.asyncData({ store, route: to })
-  //     }
-  //   })).then(() => {
+  //   bar.start()
+  //   Promise.all(asyncDataHooks.map(hook => hook({ store, route: to })))
+  //   .then(() => {
   //     // 停止加载指示器(loading indicator)
+  //     bar.finish()
   //     next()
-  //   }).catch(next)
+  //   })
+  //   .catch(next)
   // })
   // 这里设定 App.vue 模板中根元素具有 `id="app"`
   app.$mount('#app')
