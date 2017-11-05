@@ -3,6 +3,7 @@
     <header class="header">
       hello world!!! <br />
       <router-link to="/">home</router-link><br />
+      <router-link to="/vote">vote</router-link><br />
       <router-link to="/foo">foo</router-link><br />
       <router-link to="/item/1">/item/1</router-link><br />
       <router-link to="/item/2">/item/2</router-link><br />
