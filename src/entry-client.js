@@ -8,8 +8,21 @@ const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
 document.body.appendChild(bar.$el)
 
 // 客户端数据预取(Client Data Fetching)
-// 匹配要渲染的视图后，再获取数据(如需实现这种客户端数据预取策略，解注此段代码，并注释 router.beforeResolve相关代码即可)
+
+// 当路由组件重用（同一路由，但是 params 或 query 已更改，例如，从 user/1 到 user/2）时，也应该调用 asyncData 函数
 Vue.mixin({
+  beforeRouteUpdate (to, from, next) {
+    const { asyncData } = this.$options
+    if (asyncData) {
+      asyncData({
+        store: this.$store,
+        route: to
+      }).then(next).catch(next)
+    } else {
+      next()
+    }
+  },
+  // 匹配要渲染的视图后，再获取数据(如需实现这种客户端数据预取策略，解注此段代码，并注释 router.beforeResolve相关代码即可)
   beforeMount () {
     bar.start()
     const { asyncData } = this.$options
@@ -25,21 +38,6 @@ Vue.mixin({
       })
     } else {
       bar.finish()
-    }
-  }
-})
-
-// 当路由组件重用（同一路由，但是 params 或 query 已更改，例如，从 user/1 到 user/2）时，也应该调用 asyncData 函数
-Vue.mixin({
-  beforeRouteUpdate (to, from, next) {
-    const { asyncData } = this.$options
-    if (asyncData) {
-      asyncData({
-        store: this.$store,
-        route: to
-      }).then(next).catch(next)
-    } else {
-      next()
     }
   }
 })
