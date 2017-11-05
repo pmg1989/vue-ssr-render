@@ -3,6 +3,9 @@
 </template>
 <script>
 export default {
+  name: 'news-item',
+  // https://ssr.vuejs.org/zh/caching.html#component-level-caching
+  // serverCacheKey: props => props.item.id,,
   title () {
     return this.item.title
   },
