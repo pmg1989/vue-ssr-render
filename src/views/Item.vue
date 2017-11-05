@@ -15,6 +15,12 @@ export default {
     item () {
       return this.$store.state.items[this.$route.params.id] || {}
     }
+  },
+  // 修复 从当前item 条转入另一个item时 title bug
+  watch: {
+    item (newVal, oldVal) {
+      document.title = `Vue HN 2.0 | ${newVal.title}`
+    }
   }
 }
 </script>
